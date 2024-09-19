@@ -39,7 +39,7 @@ class Bank:
 
     def deposit(self):
         for _ in range(100):
-            amount = random.randint(5,500)
+            amount = random.randint(50,500)
         with self.lock:
             self.balance += amount
             print(f"Пополнение: {amount}, Баланс:{self.balance}")
@@ -49,10 +49,11 @@ class Bank:
 
     def take (self):
         for _ in range(100):
-            amount = random.randint(5,500)
+            amount = random.randint(50,500)
+            print(f"Запрос на {amount}")
             with self.lock:
-                self.balance -= amount
-                print(f"Запрос на:  {self.balance}")
+                # self.balance -= amount
+                # print(f"Запрос на:  {self.balance}")
                 if amount <= self.balance:
                     self.balance -= amount
                     print(f"Снятие: {amount} Баланас {self.balance}")
@@ -68,25 +69,14 @@ bk = Bank()
 # Создание потоков
 th1 = threading.Thread(target=Bank.deposit, args=(bk,))
 th2 = threading.Thread(target=Bank.take, args=(bk,))
-th3 = threading.Thread(target=Bank.deposit, args=(bk,))
-th4 = threading.Thread(target=Bank.take, args=(bk,))
-th5 = threading.Thread(target=Bank.deposit, args=(bk,))
 
-
-# Запуск
+# # Запуск
 th1.start()
 th2.start()
-th3.start()
-th4.start()
-th5.start()
 
-
-# Ожидание
+# # Ожидание
 th1.join()
 th2.join()
-th3.join()
-th4.join()
-th5.join()
 
 
 # Вывод итогового баланса
