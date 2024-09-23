@@ -43,24 +43,24 @@ class Bank:
         with self.lock:
             self.balance += amount
             print(f"Пополнение: {amount}, Баланс:{self.balance}")
-            if self.balance >= 500 and self.lock.locked():
-                self.lock.release()
-                time.sleep(0.001)
+            time.sleep(0.001)
 
-    def take (self):
+        def take (self):
+        failed = 0
         for _ in range(100):
             amount = random.randint(50,500)
             print(f"Запрос на {amount}")
             with self.lock:
-                # self.balance -= amount
-                # print(f"Запрос на:  {self.balance}")
                 if amount <= self.balance:
                     self.balance -= amount
                     print(f"Снятие: {amount} Баланас {self.balance}")
+                    failed =0
                 else:
                     print("Запрос отклонён, недостаточно средств")
-                    self.lock.acquire()
-                    time.sleep(0.001)
+                    failed +=1
+                    if failed >= 3:
+                        break
+        time.sleep(0.001)
 
 
 # Создание объекта банка
