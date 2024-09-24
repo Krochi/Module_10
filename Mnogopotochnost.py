@@ -42,10 +42,11 @@ def read_info(name):
     all_data = []
     with open(name, 'r') as file:
         while True:
-            lines = file.readline()
-            if not lines:
+            line = file.readline()
+            if not line:
                 break
-            all_data.append(lines.split())
+            all_data.append(line.split())
+        return all_data
 
 if __name__ == '__main__':
     filenames = [f'./file {number}.txt' for number in range(1, 5)]
@@ -55,14 +56,14 @@ if __name__ == '__main__':
     for file in filenames:
         read_info(file)
     end_time = time.time()
-    print(f"Линейный вызов: {end_time - start_time}")
+    print(f"Линейный вызов: {end_time - start_time:.6f}")
 
 
     start_time = time.time()
     with Pool() as pool:
         pool.map(read_info, filenames)
     end_time = time.time()
-    print(f"Многопроцессный вызов: {end_time - start_time}")
+    print(f"Многопроцессный вызов: {end_time - start_time:.6f}")
 
 
 
